@@ -1,0 +1,34 @@
+# Runtime state and secrets
+.env
+.env.*
+*.secret
+*.key
+*.pem
+state/
+duplicate-state/
+reports/
+plans/
+journals/
+staging/
+downloads/
+
+# Python and test artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local build/dependency output
+.venv/
+venv/
+node_modules/
+dist/
+
+# Archives and media should live outside this repository
+*.zip
+*.zip.part
+*.jpg
+*.jpeg
+*.png
+*.heic
+*.mov
+*.mp4

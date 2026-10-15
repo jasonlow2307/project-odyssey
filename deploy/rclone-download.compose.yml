@@ -1,0 +1,15 @@
+services:
+  rclone:
+    image: rclone/rclone:latest
+    container_name: rclone-download
+    working_dir: /data
+    stdin_open: true
+    tty: true
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["sleep infinity"]
+    environment:
+      RCLONE_CONFIG: /config/rclone/rclone.conf
+    volumes:
+      - /HOST/RCLONE_CONFIG_DIRECTORY:/config/rclone
+      - /HOST/MIGRATION_ROOT:/data
+    restart: "no"

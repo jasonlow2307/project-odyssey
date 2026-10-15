@@ -1,0 +1,50 @@
+{
+  "server": "http://NAS_HOST:2283",
+  "state_dir": "/srv/migration/reconciler-state",
+  "reference_directory": "/srv/migration/reference",
+  "reference_manifest": "/srv/migration/reference/albums.json",
+  "immich_go_path": "/immich-go/immich-go",
+  "immich_go_pause_immich_jobs": false,
+  "immich_go_concurrent_tasks": 1,
+  "immich_go_client_timeout": "20m",
+  "immich_go_on_errors": "continue",
+  "apply_inventory_refresh": "targeted",
+  "album_members": {
+    "users": "all",
+    "role": "editor"
+  },
+  "page_size": 1000,
+  "batch_size": 100,
+  "plan_log_interval": 250,
+  "timeout_seconds": 60,
+  "retries": 4,
+  "match": {
+    "allow_filename_size": false
+  },
+  "users": [
+    {
+      "name": "User A",
+      "api_key_env": "IMMICH_USER_A_API_KEY"
+    },
+    {
+      "name": "User B",
+      "api_key_env": "IMMICH_USER_B_API_KEY"
+    }
+  ],
+  "albums": [
+    {
+      "name": "Example album A",
+      "owner": "User A",
+      "reference": [
+        "/srv/migration/reference/example-album-a.zip"
+      ]
+    },
+    {
+      "name": "Example album B",
+      "owner": "User B",
+      "reference": [
+        "/srv/migration/reference/example-album-b.zip"
+      ]
+    }
+  ]
+}

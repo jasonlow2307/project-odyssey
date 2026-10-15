@@ -1,0 +1,14 @@
+services:
+  immich-go-terminal:
+    image: REPLACE_WITH_YOUR_MIGRATION_TOOLS_IMAGE
+    container_name: immich-go-terminal
+    hostname: immich-go-terminal
+    working_dir: /srv/migration
+    network_mode: host
+    stdin_open: true
+    tty: true
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["sleep infinity"]
+    volumes:
+      - /HOST/MIGRATION_ROOT:/srv/migration
+    restart: "no"

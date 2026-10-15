@@ -1,0 +1,33 @@
+# Merge this into the existing Chromium/Selkies Compose project.
+# Keep CDP port 9222 private to the Chromium network namespace.
+services:
+  chromium:
+    environment:
+      - CHROME_CLI=--user-data-dir=/config/photos-playwright-profile --remote-debugging-port=9222
+
+  photos-downloader:
+    build:
+      context: ../
+      dockerfile: deploy/google-photos-playwright.Dockerfile
+    container_name: google-photos-playwright
+    network_mode: "service:chromium"
+    depends_on:
+      - chromium
+    environment:
+      - CDP_URL=http://127.0.0.1:9222
+      - ACCOUNT_LABEL=account-1
+      - TMPDIR=/downloads/.playwright-tmp
+      - MAX_ALBUMS=0
+      - MAX_CONCURRENT_DOWNLOADS=5
+      - SKIP_ALBUMS=already-exported-album
+      - NAVIGATION_RETRIES=3
+      - ALBUM_RETRIES=3
+      - ALBUM_TITLE_TIMEOUT_SECONDS=120
+      - DOWNLOAD_EVENT_TIMEOUT_MS=900000
+      - DOWNLOAD_PROGRESS_INTERVAL_SECONDS=60
+      - DOWNLOAD_COMPLETION_TIMEOUT_SECONDS=21600
+      - VERIFY_ZIP_CRC=true
+      - ALBUMS_URL=https://photos.google.com/albums
+    volumes:
+      - /HOST/REFERENCE_DIRECTORY:/downloads
+    restart: "no"

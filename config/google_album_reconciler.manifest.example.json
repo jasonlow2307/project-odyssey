@@ -1,0 +1,14 @@
+{
+  "albums": [
+    {
+      "zip": "example-album-a.zip",
+      "name": "Example album A",
+      "owner": "User A"
+    },
+    {
+      "zip": "example-album-b.zip",
+      "name": "Example album B",
+      "owner": "User B"
+    }
+  ]
+}

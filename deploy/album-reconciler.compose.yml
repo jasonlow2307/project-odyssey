@@ -1,0 +1,15 @@
+services:
+  album-reconciler:
+    image: python:3.12-slim
+    container_name: album-reconciler
+    hostname: album-reconciler
+    working_dir: /srv/migration
+    network_mode: host
+    stdin_open: true
+    tty: true
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["sleep infinity"]
+    volumes:
+      - /HOST/MIGRATION_ROOT:/srv/migration
+      - /HOST/IMMICH_GO_DIRECTORY:/immich-go:ro
+    restart: "no"
