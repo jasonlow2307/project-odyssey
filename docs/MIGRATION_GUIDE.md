@@ -113,7 +113,7 @@ services:
 
 The container is intentionally just a terminal/runtime. It publishes no port. network_mode: host allows it to reach the internal Immich service at NAS_HOST:2283.
 
-The checked-in workspace copy is [docker/test-migration/docker-compose.yml](<docker/test-migration/docker-compose.yml>).
+The repository deployment template is [deploy/album-reconciler.compose.yml](<../deploy/album-reconciler.compose.yml>).
 
 ## 5. Remote access and terminal options
 
@@ -226,7 +226,7 @@ If Chromium crashes with Aborted (core dumped) in the Wayland compositor, set PI
 
 ### 6.5 rclone
 
-rclone is useful for moving Takeout archives from Google Drive to the NAS without routing them through a laptop. The working container template is [outputs/rclone-download.compose.yml](<outputs/rclone-download.compose.yml>).
+rclone is useful for moving Takeout archives from Google Drive to the NAS without routing them through a laptop. The container template is [deploy/rclone-download.compose.yml](<../deploy/rclone-download.compose.yml>).
 
 It does **not** turn Google Photos shared albums into an rclone remote. It copies objects from Drive. For a complete shared album, the NAS browser’s “Download all” route is the more reliable source.
 
@@ -408,13 +408,13 @@ An empty result means the member is not present in the response, not necessarily
 
 ## 9. Reconciler design
 
-The main source is [outputs/google_album_reconciler.py](<outputs/google_album_reconciler.py>). The NAS-staged copy is [docker/test-migration/app/google_album_reconciler.py](<docker/test-migration/app/google_album_reconciler.py>). At the time this guide was written, the two files matched byte-for-byte and both passed Python compilation.
+The checked-in source is [scripts/google_album_reconciler.py](<../scripts/google_album_reconciler.py>). Deploy that file into the reconciler container; do not maintain a second divergent copy.
 
 The companion documents are:
 
-- [google_album_reconciler.README.md](<outputs/google_album_reconciler.README.md>)
-- [google_album_reconciler.RUNBOOK.md](<outputs/google_album_reconciler.RUNBOOK.md>)
-- [SETUP.md](<docker/test-migration/SETUP.md>)
+- [README.md](<../README.md>)
+- [BUNDLE_MANIFEST.md](<../BUNDLE_MANIFEST.md>)
+- [SCENARIOS.md](<SCENARIOS.md>)
 
 ### 9.1 plan is read-only
 
@@ -551,25 +551,20 @@ The current local script includes a force_external_upload plan-item flag. Normal
 
 This is useful when a same-byte match exists elsewhere but policy requires a fresh copy under the album owner. It is an exception, not the default. The same script must be deployed to the NAS before using plans that contain this flag.
 
-## 9.8 Workspace artifact inventory
+## 9.8 Repository artifact inventory
 
-The migration workspace contains these directly useful artifacts:
+The public repository keeps the reusable artifacts in these locations:
 
-- [outputs/google_album_reconciler.py](<outputs/google_album_reconciler.py>): source/reference reconciler. Current tool version is 6.
-- [docker/test-migration/app/google_album_reconciler.py](<docker/test-migration/app/google_album_reconciler.py>): NAS-staged copy. It matched the output copy when this guide was compiled.
-- [outputs/google_album_reconciler.README.md](<outputs/google_album_reconciler.README.md>): concise design and safety documentation.
-- [outputs/google_album_reconciler.RUNBOOK.md](<outputs/google_album_reconciler.RUNBOOK.md>): operational runbook.
-- [docker/migration/SETUP.md](<docker/migration/SETUP.md>): first single-album test setup.
-- [outputs/google_album_reconciler.config.example.json](<outputs/google_album_reconciler.config.example.json>): single/few-album configuration template.
-- [outputs/google_album_reconciler.multi.config.example.json](<outputs/google_album_reconciler.multi.config.example.json>): manifest-based multi-album template.
-- [outputs/google_album_config.json](<outputs/google_album_config.json>): early Shared Album Test example.
-- [docker/test-migration/app/google_album_reconciler.config.json](<docker/test-migration/app/google_album_reconciler.config.json>): test/target configuration; review it before production use.
-- [docker/test-migration/app/google_album_reconciler.remaining.config.json](<docker/test-migration/app/google_album_reconciler.remaining.config.json>): remaining-album batch configuration.
-- [docker/test-migration/app/google_album_reconciler.new-albums.config.json](<docker/test-migration/app/google_album_reconciler.new-albums.config.json>): later new-album batch configuration.
-- [outputs/immich-go-production.compose.yml](<outputs/immich-go-production.compose.yml>): placeholder Compose project for a separate immich-go terminal.
-- [outputs/rclone-download.compose.yml](<outputs/rclone-download.compose.yml>): rclone terminal project for Google Drive-to-NAS copies.
-
-The browser downloader/Playwright project was developed in the related remote-download thread rather than in this migration workspace. Its deployment bundle was recorded there as google-photos-playwright.zip under the 2026-09-28 now-x20 workspace.
+- [scripts/google_album_reconciler.py](<../scripts/google_album_reconciler.py>): reconciler implementation, currently tool version 6.
+- [config/google_album_reconciler.example.json](<../config/google_album_reconciler.example.json>): sanitized configuration template.
+- [config/google_album_reconciler.manifest.example.json](<../config/google_album_reconciler.manifest.example.json>): sanitized reference manifest example.
+- [deploy/album-reconciler.compose.yml](<../deploy/album-reconciler.compose.yml>): reconciler container template.
+- [deploy/immich-go-terminal.compose.yml](<../deploy/immich-go-terminal.compose.yml>): terminal template for a separately supplied immich-go image.
+- [deploy/rclone-download.compose.yml](<../deploy/rclone-download.compose.yml>): Google Drive-to-NAS transfer template.
+- [scripts/download_albums.py](<../scripts/download_albums.py>): Chromium CDP downloader.
+- [scripts/immich_cross_user_duplicates.py](<../scripts/immich_cross_user_duplicates.py>): smaller-library duplicate report.
+- [scripts/immich_cross_user_duplicates_batched.py](<../scripts/immich_cross_user_duplicates_batched.py>): resumable large-library duplicate workflow.
+- [scripts/immich-trash-duplicates.sh](<../scripts/immich-trash-duplicates.sh>): preview-first Trash helper.
 
 ## 9.9 Representative migration scale
 
@@ -640,7 +635,7 @@ Use placeholders and keep keys out of the file:
 
 ### 10.2 Manifest mode for many ZIPs
 
-The multi-album example is [outputs/google_album_reconciler.multi.config.example.json](<outputs/google_album_reconciler.multi.config.example.json>).
+The multi-album example is [config/google_album_reconciler.example.json](<../config/google_album_reconciler.example.json>).
 
 Instead of a long albums array:
 
@@ -1344,11 +1339,7 @@ Review each extracted plan before applying. Do not split through a shell variabl
 ### Validate the local copies before deployment
 
 ~~~sh
-cmp -s outputs/google_album_reconciler.py \
-  docker/test-migration/app/google_album_reconciler.py
-python3 -m py_compile \
-  outputs/google_album_reconciler.py \
-  docker/test-migration/app/google_album_reconciler.py
+python3 -m py_compile scripts/google_album_reconciler.py
 ~~~
 
 ## 18. Things not to do

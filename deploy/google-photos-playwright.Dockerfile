@@ -3,10 +3,11 @@ FROM python:3.13-slim
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-RUN pip install --no-cache-dir playwright
+COPY requirements/downloader.txt /tmp/requirements-downloader.txt
+RUN pip install --no-cache-dir -r /tmp/requirements-downloader.txt
 
 WORKDIR /app
-COPY download_albums.py /app/download_albums.py
+COPY scripts/download_albums.py /app/download_albums.py
 
 RUN useradd --uid 1000 --create-home downloader \
     && mkdir -p /downloads \

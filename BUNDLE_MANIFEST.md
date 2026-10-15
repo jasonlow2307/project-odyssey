@@ -21,6 +21,7 @@ The source file and its local deployment copy were compared before packaging; th
 - `deploy/google-photos-playwright.Dockerfile` — generic image definition.
 - `deploy/google-photos-playwright.compose-addon.yml` — sanitized Compose add-on with placeholder paths and an example skip list.
 - `docs/DOWNLOADER.md` — setup and operating notes.
+- `requirements/downloader.txt` — Playwright runtime dependency used by the downloader image.
 
 ### Duplicate discovery and cleanup
 
@@ -31,6 +32,7 @@ The source file and its local deployment copy were compared before packaging; th
 - `tests/test_tool.py` and `tests/test_batched_tool.py` — unit tests with sanitized fixture names.
 - `scripts/immich-trash-duplicates.sh` — preview-first helper for moving independently reviewed duplicate candidates to Immich Trash. It does not permanently delete files.
 - `tools/build_public_guide.py` — portable ReportLab helper for regenerating the public PDF from the Markdown guide; its dependency is listed in `requirements/docs.txt`.
+- `docs/SCENARIOS.md` — verification matrix covering each script’s supported workflows and live-environment boundaries.
 
 ## Source workstreams consulted
 

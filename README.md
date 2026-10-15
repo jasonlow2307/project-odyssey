@@ -25,6 +25,7 @@ The scripts are operational tools, not a turnkey Immich distribution. Review the
 | Tests | `tests/` | Unit tests for both duplicate-report implementations. |
 | Documentation build | `tools/build_public_guide.py` | Rebuild the public PDF from `docs/MIGRATION_GUIDE.md` using portable ReportLab fonts. |
 | Guide | `docs/MIGRATION_GUIDE.md` and `.pdf` | Public-safe operational guide. |
+| Scenario matrix | `docs/SCENARIOS.md` | Supported workflows, safety boundaries, and verification status for every tool. |
 
 ## Quick start
 
@@ -60,7 +61,7 @@ Use `--upload-missing` only after reviewing the plan. Use the rollback command d
 
 ### 2. NAS Google Photos downloader
 
-Build `deploy/google-photos-playwright.Dockerfile` with `scripts/download_albums.py` in the build context. Merge `deploy/google-photos-playwright.compose-addon.yml` into the existing Chromium/Selkies Compose project. Keep CDP port 9222 private to the Chromium network namespace.
+Build `deploy/google-photos-playwright.Dockerfile` from the repository root. It installs `requirements/downloader.txt` and copies `scripts/download_albums.py` into the image. Merge `deploy/google-photos-playwright.compose-addon.yml` into the existing Chromium/Selkies Compose project. Keep CDP port 9222 private to the Chromium network namespace.
 
 Sign in manually inside the NAS browser, then start the downloader. The runner saves ZIPs to the mounted reference directory, waits for native Chromium download completion, writes a manifest, and optionally verifies ZIP CRCs.
 
@@ -124,6 +125,8 @@ python3 tools/build_public_guide.py
 ```
 
 The duplicate scanners require PostgreSQL connectivity and their listed dependencies. The reconciler requires the Immich API, the configured `immich-go` binary for explicit external uploads, and a writable state directory.
+
+See [`docs/SCENARIOS.md`](docs/SCENARIOS.md) for the tested local surface and live-environment acceptance checks.
 
 ## Safety rules
 
